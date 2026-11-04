@@ -1,0 +1,271 @@
+{
+  "version": 1,
+  "note": "Held-out set. Written without looking at retrieval results. Do not tune on it; report numbers from here.",
+  "questions": [
+    {
+      "id": "h_eg_min",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie viel Elterngeld bekomme ich mindestens, auch wenn ich vorher nichts verdient habe?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "beträgt mindestens 300 Euro und höchstens 1.800 Euro"
+        }
+      ]
+    },
+    {
+      "id": "h_elternzeit",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie lange kann man pro Kind in Elternzeit gehen?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "bis zu 3 Jahre Elternzeit nehmen"
+        }
+      ]
+    },
+    {
+      "id": "h_mietkuend",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Welche Kündigungsfrist gilt, wenn ich als Mieter meine Wohnung kündigen will?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmjv_leitfaden_wohnraummietrecht.pdf",
+          "span": "Kündigungsfrist von knapp drei Monaten"
+        }
+      ]
+    },
+    {
+      "id": "h_zuzahlung",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie hoch ist die Zuzahlung bei Medikamenten mindestens?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmg_ratgeber_krankenversicherung.pdf",
+          "span": "Mindestanteil von 5 Euro"
+        },
+        {
+          "source": "bmg_ratgeber_krankenversicherung.pdf",
+          "span": "jedoch mindestens 5 Euro und maximal 10 Euro"
+        }
+      ]
+    },
+    {
+      "id": "h_kindergeld_alter",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Bis zu welchem Alter bekommen Eltern Kindergeld, wenn das Kind in Ausbildung ist?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_kindergeld_2026.pdf",
+          "span": "bis zum 21. oder 25. Lebensjahr weitergezahlt"
+        }
+      ]
+    },
+    {
+      "id": "h_alg_kinder",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie viel Prozent Arbeitslosengeld bekomme ich, wenn ich Kinder habe?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "67 statt 60 Prozent des Leistungsentgeltes"
+        }
+      ]
+    },
+    {
+      "id": "h_kuendschutz",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie lange nach der Entbindung ist man vor Kündigung geschützt?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "Kündigungsschutzfrist von in der Regel vier Monaten"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "mindestens jedoch bis zum Ablauf von vier Monaten nach der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_schwangere.pdf",
+          "span": "mindestens jedoch bis zum Ablauf von vier Monaten nach der Entbindung"
+        }
+      ]
+    },
+    {
+      "id": "h_wohngeld_dauer",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie lange wird Wohngeld bewilligt, bevor ich neu beantragen muss?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "Bewilligungszeitraums – in der Regel ein Jahr"
+        }
+      ]
+    },
+    {
+      "id": "h_werkstudent",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Ab wann gilt man nicht mehr als Werkstudent?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "drv_tipps_fuer_studierende.pdf",
+          "span": "nicht mehr als Werkstudent, sondern als klassischer Arbeitnehmer"
+        }
+      ]
+    },
+    {
+      "id": "h_mietminderung",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Darf ich die Miete mindern, wenn der Vermieter Erhaltungsmaßnahmen durchführt?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmjv_leitfaden_wohnraummietrecht.pdf",
+          "span": "die Miete mindern oder Schadensersatz"
+        }
+      ]
+    },
+    {
+      "id": "h_en_elternzeit",
+      "type": "english",
+      "lang": "en",
+      "question": "How long can parents take parental leave for each child?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "bis zu 3 Jahre Elternzeit nehmen"
+        }
+      ]
+    },
+    {
+      "id": "h_en_alg",
+      "type": "english",
+      "lang": "en",
+      "question": "Is unemployment benefit higher if I have children?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "67 statt 60 Prozent des Leistungsentgeltes"
+        }
+      ]
+    },
+    {
+      "id": "h_en_kuendschutz",
+      "type": "english",
+      "lang": "en",
+      "question": "How long does protection against dismissal last after giving birth?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "Kündigungsschutzfrist von in der Regel vier Monaten"
+        }
+      ]
+    },
+    {
+      "id": "h_en_wohngeld",
+      "type": "english",
+      "lang": "en",
+      "question": "For how long is housing benefit granted before I have to reapply?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "Bewilligungszeitraums – in der Regel ein Jahr"
+        }
+      ]
+    },
+    {
+      "id": "h_en_werkstudent",
+      "type": "english",
+      "lang": "en",
+      "question": "When am I no longer treated as a working student for social insurance?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "drv_tipps_fuer_studierende.pdf",
+          "span": "nicht mehr als Werkstudent, sondern als klassischer Arbeitnehmer"
+        }
+      ]
+    },
+    {
+      "id": "h_xl_eg_min",
+      "type": "cross_lingual",
+      "lang": "en",
+      "question": "What is the minimum and maximum amount of basic parental allowance per month?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "beträgt mindestens 300 Euro und höchstens 1.800 Euro"
+        }
+      ]
+    },
+    {
+      "id": "h_kw_eg",
+      "type": "keyword",
+      "lang": "de",
+      "question": "Basiselterngeld Mindestbetrag Höchstbetrag",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "beträgt mindestens 300 Euro und höchstens 1.800 Euro"
+        }
+      ]
+    },
+    {
+      "id": "h_oos_kita",
+      "type": "out_of_scope",
+      "lang": "de",
+      "question": "Wie beantrage ich einen Kita-Platz in Hamburg?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "h_oos_gmbh",
+      "type": "out_of_scope",
+      "lang": "de",
+      "question": "Wie gründe ich eine GmbH und was kostet der Notar?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "h_oos_impf",
+      "type": "out_of_scope",
+      "lang": "de",
+      "question": "Welche Impfungen brauche ich für die Einreise nach Thailand?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "h_oos_food",
+      "type": "out_of_scope",
+      "lang": "en",
+      "question": "What is the best restaurant in Munich?",
+      "answerable": false,
+      "evidence": []
+    }
+  ]
+}

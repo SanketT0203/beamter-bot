@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+
+# downloaded source PDFs are not redistributed (see docs_manifest.csv)
+corpus/
+.cache/
+eval_results/
+_to_delete/

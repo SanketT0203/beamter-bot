@@ -1,0 +1,552 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "de_kindergeld",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie hoch ist das Kindergeld pro Kind im Monat 2026?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_kindergeld_2026.pdf",
+          "span": "monatlich 259 Euro"
+        }
+      ]
+    },
+    {
+      "id": "de_kaution",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie hoch darf die Mietkaution höchstens sein?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmjv_leitfaden_wohnraummietrecht.pdf",
+          "span": "drei Monatsmieten"
+        }
+      ]
+    },
+    {
+      "id": "de_mutterschutz",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie lange dauern die Mutterschutzfristen vor und nach der Geburt?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_mutterschutz_schwangere.pdf",
+          "span": "Die Schutzfristen beginnen grundsätzlich sechs Wochen vor der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "Die Schutzfristen beginnen grundsätzlich sechs Wochen vor der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_schwangere.pdf",
+          "span": "beginnt sechs Wochen vor dem voraussichtlichen Tag der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "beginnt sechs Wochen vor dem voraussichtlichen Tag der Entbindung"
+        }
+      ]
+    },
+    {
+      "id": "de_studierende_arbeit",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie viele Tage im Jahr dürfen ausländische Studierende arbeiten?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "up to 140 full days or 280 half days"
+        }
+      ]
+    },
+    {
+      "id": "de_rundfunk",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie hoch ist der Rundfunkbeitrag pro Monat?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "rundfunkbeitrag_befreiung_ermaessigung.pdf",
+          "span": "18,36"
+        },
+        {
+          "source": "rundfunkbeitrag_info.pdf",
+          "span": "Beitrag von 18,36 Euro"
+        }
+      ]
+    },
+    {
+      "id": "de_grundfreibetrag",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie hoch ist der Grundfreibetrag?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmf_steuern_von_a_bis_z.pdf",
+          "span": "Grundfreibetrag in Höhe von 12.096 Euro"
+        }
+      ]
+    },
+    {
+      "id": "de_integrationskurs",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Was kostet der Integrationskurs pro Unterrichtsstunde?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bamf_integrationskurs_zulassung.pdf",
+          "span": "2,29 Euro pro Unterrichtsstunde"
+        }
+      ]
+    },
+    {
+      "id": "de_pflegegeld",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie viel Pflegegeld bekommt man bei Pflegegrad 3?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmg_ratgeber_pflegeleistungen.pdf",
+          "span": "Pflegegrad 3 545 Euro"
+        }
+      ]
+    },
+    {
+      "id": "de_minijob",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Bis zu welchem Verdienst im Monat ist ein Minijob möglich?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "drv_minijobs_midijobs.pdf",
+          "span": "603 Euro im Monat"
+        }
+      ]
+    },
+    {
+      "id": "de_arbeitsuchend",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wann muss ich mich arbeitsuchend melden, wenn mein Arbeitsverhältnis endet?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "spätestens drei Monate vor der Beendigung"
+        },
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "spätestens drei Monate vorher arbeitsuchend"
+        }
+      ]
+    },
+    {
+      "id": "de_alg_anwartschaft",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie lange muss ich versicherungspflichtig gewesen sein, um Arbeitslosengeld zu bekommen?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_arbeitslosengeld_ausland.pdf",
+          "span": "mindestens 12 Monate versicherungspflichtig"
+        },
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "mindestens 12 Monate (das sind 360 Kalendertage"
+        }
+      ]
+    },
+    {
+      "id": "de_elterngeld",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Wie viel Prozent des Nettoeinkommens beträgt das Basiselterngeld?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "65 Prozent des Netto-Einkommens"
+        }
+      ]
+    },
+    {
+      "id": "de_anmeldung",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Innerhalb welcher Frist muss ich meinen Wohnsitz anmelden?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "anmeldung_merkblatt.pdf",
+          "span": "14 Tage Zeit"
+        }
+      ]
+    },
+    {
+      "id": "de_bluecard",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Welches Mindestgehalt wird für die Blaue Karte verlangt?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "blue_card_merkblatt.pdf",
+          "span": "50.700,-EUR/Jahr"
+        }
+      ]
+    },
+    {
+      "id": "de_wohngeld",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Welche Unterlagen brauche ich für den Wohngeldantrag?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "das ausgefüllte Antragsformular auf Wohngeld"
+        },
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "Einkommensnachweise (Ausbildungs- oder Arbeitsvertrag"
+        }
+      ]
+    },
+    {
+      "id": "de_fuehrerschein",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Kann die Frist für den ausländischen Führerschein verlängert werden?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bremen_auslaendische_fahrerlaubnis.pdf",
+          "span": "bis zu sechs Monate verlängern"
+        }
+      ]
+    },
+    {
+      "id": "de_student_kv",
+      "type": "factoid_de",
+      "lang": "de",
+      "question": "Bis zu welchem Alter bieten gesetzliche Krankenkassen Studierenden einen günstigen Tarif an?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "hswt_krankenversicherung_2025.pdf",
+          "span": "bis zum Ende des Semesters, in dem das 30. Lebensjahr vollendet wird"
+        },
+        {
+          "source": "bmg_ratgeber_krankenversicherung.pdf",
+          "span": "längstens bis zur Vollendung des 30. Lebensjahres versicherungspflichtig"
+        }
+      ]
+    },
+    {
+      "id": "en_kindergeld",
+      "type": "english",
+      "lang": "en",
+      "question": "How much is child benefit per month in 2026?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_kindergeld_2026.pdf",
+          "span": "monatlich 259 Euro"
+        }
+      ]
+    },
+    {
+      "id": "en_student_days",
+      "type": "english",
+      "lang": "en",
+      "question": "How many days per year may international students work?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "up to 140 full days or 280 half days"
+        }
+      ]
+    },
+    {
+      "id": "en_20h",
+      "type": "english",
+      "lang": "en",
+      "question": "How many hours per week can a student work without German health insurance?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "The limit is currently 20 hours per week"
+        }
+      ]
+    },
+    {
+      "id": "en_tuition",
+      "type": "english",
+      "lang": "en",
+      "question": "Do I have to pay tuition fees at public universities in Germany?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "You do not usually pay tuition fees at public higher education institutions"
+        },
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "Tuition fees are not charged for most"
+        }
+      ]
+    },
+    {
+      "id": "en_semester_fee",
+      "type": "english",
+      "lang": "en",
+      "question": "How high is the semester fee at German universities?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "between €170 and €450"
+        }
+      ]
+    },
+    {
+      "id": "en_bluecard",
+      "type": "english",
+      "lang": "en",
+      "question": "What is the minimum gross salary for the EU Blue Card?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "blue_card_merkblatt.pdf",
+          "span": "50.700,-EUR/Jahr"
+        }
+      ]
+    },
+    {
+      "id": "en_jobseeker",
+      "type": "english",
+      "lang": "en",
+      "question": "How early do I have to register as job-seeking before my employment ends?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "spätestens drei Monate vor der Beendigung"
+        }
+      ]
+    },
+    {
+      "id": "en_parental",
+      "type": "english",
+      "lang": "en",
+      "question": "What share of my net income does parental allowance replace?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_elterngeld_und_elternzeit.pdf",
+          "span": "65 Prozent des Netto-Einkommens"
+        }
+      ]
+    },
+    {
+      "id": "en_housing_benefit",
+      "type": "english",
+      "lang": "en",
+      "question": "Which documents do I need to apply for housing benefit?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "das ausgefüllte Antragsformular auf Wohngeld"
+        },
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "Einkommensnachweise (Ausbildungs- oder Arbeitsvertrag"
+        }
+      ]
+    },
+    {
+      "id": "x_de_en_20h",
+      "type": "cross_lingual",
+      "lang": "de",
+      "question": "Wie viele Wochenstunden dürfen Studierende ohne deutsche Krankenversicherung arbeiten?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "The limit is currently 20 hours per week"
+        }
+      ]
+    },
+    {
+      "id": "x_de_en_tuition",
+      "type": "cross_lingual",
+      "lang": "de",
+      "question": "Muss ich an staatlichen Hochschulen Studiengebühren zahlen?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "You do not usually pay tuition fees at public higher education institutions"
+        },
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "Tuition fees are not charged for most"
+        }
+      ]
+    },
+    {
+      "id": "x_en_de_mietkaution",
+      "type": "cross_lingual",
+      "lang": "en",
+      "question": "What is the maximum rental deposit a landlord may ask for?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmjv_leitfaden_wohnraummietrecht.pdf",
+          "span": "drei Monatsmieten"
+        }
+      ]
+    },
+    {
+      "id": "x_en_de_maternity",
+      "type": "cross_lingual",
+      "lang": "en",
+      "question": "How many weeks before birth does maternity protection begin?",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmfsfj_mutterschutz_schwangere.pdf",
+          "span": "Die Schutzfristen beginnen grundsätzlich sechs Wochen vor der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "Die Schutzfristen beginnen grundsätzlich sechs Wochen vor der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_schwangere.pdf",
+          "span": "beginnt sechs Wochen vor dem voraussichtlichen Tag der Entbindung"
+        },
+        {
+          "source": "bmfsfj_mutterschutz_arbeitgeber.pdf",
+          "span": "beginnt sechs Wochen vor dem voraussichtlichen Tag der Entbindung"
+        }
+      ]
+    },
+    {
+      "id": "kw_grundfreibetrag",
+      "type": "keyword",
+      "lang": "de",
+      "question": "Grundfreibetrag 2025",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmf_steuern_von_a_bis_z.pdf",
+          "span": "Grundfreibetrag in Höhe von 12.096 Euro"
+        }
+      ]
+    },
+    {
+      "id": "kw_geringfuegigkeit",
+      "type": "keyword",
+      "lang": "de",
+      "question": "Geringfügigkeitsgrenze",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "drv_minijobs_midijobs.pdf",
+          "span": "603 Euro im Monat"
+        }
+      ]
+    },
+    {
+      "id": "kw_steuer_id",
+      "type": "keyword",
+      "lang": "de",
+      "question": "Steuer-Identifikationsnummer Antrag Arbeitslosengeld",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "ba_merkblatt_fuer_arbeitslose.pdf",
+          "span": "Bitte geben Sie diese im Antrag auf Arbeitslosengeld an"
+        }
+      ]
+    },
+    {
+      "id": "oos_bau",
+      "type": "out_of_scope",
+      "lang": "de",
+      "question": "Was kostet eine Baugenehmigung für ein Einfamilienhaus?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "oos_hund",
+      "type": "out_of_scope",
+      "lang": "de",
+      "question": "Wie hoch ist die Hundesteuer in München?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "oos_weather",
+      "type": "out_of_scope",
+      "lang": "en",
+      "question": "What is the weather like in Berlin tomorrow?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "oos_recipe",
+      "type": "out_of_scope",
+      "lang": "en",
+      "question": "How do I cook Maultaschen?",
+      "answerable": false,
+      "evidence": []
+    },
+    {
+      "id": "kw_blocked_account",
+      "type": "keyword",
+      "lang": "en",
+      "question": "blocked account",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "daad_studying_in_germany.pdf",
+          "span": "Most international students use a type of account known as a"
+        }
+      ]
+    },
+    {
+      "id": "kw_housing_typo",
+      "type": "keyword",
+      "lang": "en",
+      "question": "housing benifit",
+      "answerable": true,
+      "evidence": [
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "das ausgefüllte Antragsformular auf Wohngeld"
+        },
+        {
+          "source": "bmwsb_auf_wohnungssuche.pdf",
+          "span": "Einkommensnachweise (Ausbildungs- oder Arbeitsvertrag"
+        }
+      ]
+    }
+  ]
+}

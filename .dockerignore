@@ -1,0 +1,8 @@
+# Allow-list: nothing goes into the image unless it is named here. A new file (a .env, a notebook,
+# the PDFs) is therefore excluded by default instead of leaking by accident.
+*
+!pyproject.toml
+!uv.lock
+!src
+**/__pycache__
+**/*.pyc

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beamter-Bot</title>
+<meta name="description" content="Fragen zu deutschen Behörden und Formularen, beantwortet mit Quellenangaben aus offiziellen Dokumenten.">
+<style>
+:root {
+  --bg: #f6f5f1; --surface: #ffffff; --ink: #1b2330; --muted: #5d6675; --line: #dcd9d0;
+  --accent: #1f4e8c; --accent-ink: #ffffff; --accent-soft: #e6eef8;
+  --warn-bg: #fbf1dc; --warn-ink: #6b4a05; --err-bg: #fbe7e5; --err-ink: #8a1f17;
+  --ok: #2f7d4f; --shadow: 0 1px 2px rgba(20,30,50,.06), 0 4px 16px rgba(20,30,50,.05);
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --surface: #1a1f28; --ink: #e8ebf1; --muted: #98a2b3; --line: #2b3240;
+    --accent: #7aa7e6; --accent-ink: #0c1626; --accent-soft: #1e2a3d;
+    --warn-bg: #3a3017; --warn-ink: #f0d9a0; --err-bg: #3d1f1d; --err-ink: #f5b5ae;
+    --ok: #67c08a; --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --surface: #1a1f28; --ink: #e8ebf1; --muted: #98a2b3; --line: #2b3240;
+  --accent: #7aa7e6; --accent-ink: #0c1626; --accent-soft: #1e2a3d;
+  --warn-bg: #3a3017; --warn-ink: #f0d9a0; --err-bg: #3d1f1d; --err-ink: #f5b5ae;
+  --ok: #67c08a; --shadow: none;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  display: flex; flex-direction: column;
+}
+button, select, textarea, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header {
+  border-bottom: 1px solid var(--line); background: var(--surface);
+}
+.bar {
+  max-width: 860px; margin: 0 auto; padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.brand { display: flex; flex-direction: column; flex: 1 1 150px; min-width: 0; }
+.brand h1 { margin: 0; font-size: 1.15rem; letter-spacing: .01em; white-space: nowrap; }
+.brand span { font-size: .8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nb { display: inline-block; white-space: nowrap; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; white-space: nowrap;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.pill[data-state="ready"] .dot { background: var(--ok); }
+.pill[data-state="loading"] .dot { background: #d9a21b; animation: pulse 1.2s infinite; }
+.pill[data-state="failed"] .dot { background: #c0392b; }
+@keyframes pulse { 50% { opacity: .35; } }
+.tool {
+  background: transparent; border: 1px solid var(--line); border-radius: 8px;
+  padding: 5px 10px; cursor: pointer; font-size: .85rem;
+}
+.tool:hover { background: var(--accent-soft); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 5px 10px; cursor: pointer; font-size: .85rem; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+select.tool { max-width: 220px; }
+
+main { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+#thread { max-width: 860px; margin: 0 auto; padding: 20px 16px 8px; display: flex; flex-direction: column; gap: 18px; }
+
+.empty { text-align: center; padding: 36px 0 8px; }
+.empty h2 { margin: 0 0 6px; font-size: 1.5rem; }
+.empty p { margin: 0 auto 18px; max-width: 560px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.chip {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 7px 14px; cursor: pointer; font-size: .9rem; text-align: left;
+}
+.chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+.msg { display: flex; flex-direction: column; gap: 6px; max-width: 100%; }
+.msg.user { align-items: flex-end; }
+.bubble {
+  padding: 10px 14px; border-radius: 14px; max-width: min(100%, 680px);
+  overflow-wrap: anywhere; word-break: break-word;
+}
+.user .bubble { background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 4px; white-space: pre-wrap; }
+.bot .bubble { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 4px; box-shadow: var(--shadow); }
+.bot .bubble p { margin: 0 0 .6em; } .bot .bubble p:last-child { margin-bottom: 0; }
+.bot .bubble ul, .bot .bubble ol { margin: .2em 0 .6em; padding-left: 1.3em; }
+.bot .bubble.refused { background: var(--warn-bg); color: var(--warn-ink); border-color: transparent; }
+.bot .bubble.error { background: var(--err-bg); color: var(--err-ink); border-color: transparent; }
+.cursor::after { content: "▍"; animation: pulse 1s infinite; margin-left: 1px; color: var(--muted); }
+
+button.cite {
+  border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 6px;
+  padding: 0 6px; margin: 0 1px; font-size: .78em; font-weight: 600; cursor: pointer; vertical-align: baseline;
+  line-height: 1.5;
+}
+button.cite:hover { background: var(--accent); color: var(--accent-ink); }
+
+.sources { max-width: min(100%, 680px); display: flex; flex-direction: column; gap: 6px; }
+.sources > .label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+details.src { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; font-size: .9rem; }
+details.src summary { cursor: pointer; padding: 7px 12px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+details.src summary::-webkit-details-marker { display: none; }
+details.src summary::before { content: "▸"; color: var(--muted); font-size: .8em; }
+details.src[open] summary::before { content: "▾"; }
+details.src .n { color: var(--accent); font-weight: 700; }
+details.src .file { font-family: var(--mono); font-size: .82rem; overflow-wrap: anywhere; }
+details.src .pg { color: var(--muted); margin-left: auto; white-space: nowrap; font-size: .82rem; }
+details.src .body { padding: 0 12px 10px 30px; color: var(--muted); }
+details.src .body q { display: block; color: var(--ink); font-style: normal; quotes: none; border-left: 3px solid var(--line); padding-left: 10px; margin-top: 4px; }
+details.src.flash { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+
+details.how { font-size: .8rem; color: var(--muted); max-width: min(100%, 680px); }
+details.how summary { cursor: pointer; }
+details.how dl { margin: 6px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; }
+details.how dt { color: var(--muted); } details.how dd { margin: 0; font-family: var(--mono); overflow-wrap: anywhere; }
+
+.banner { max-width: 860px; margin: 10px auto 0; padding: 0 16px; }
+.banner > div { background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: 10px 14px; font-size: .9rem; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.banner input { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 5px 9px; min-width: 200px; }
+.banner[hidden] { display: none; }
+
+footer { border-top: 1px solid var(--line); background: var(--surface); }
+form { max-width: 860px; margin: 0 auto; padding: 10px 16px 6px; display: flex; gap: 8px; align-items: flex-end; }
+textarea {
+  flex: 1; resize: none; border: 1px solid var(--line); background: var(--bg); border-radius: 12px;
+  padding: 10px 12px; max-height: 160px; min-height: 44px;
+}
+textarea:disabled { opacity: .6; }
+.send {
+  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px;
+  padding: 0 18px; height: 44px; cursor: pointer; font-weight: 600;
+}
+.send:disabled { opacity: .45; cursor: not-allowed; }
+.send.stop { background: var(--muted); }
+.fine { max-width: 860px; margin: 0 auto; padding: 0 16px 10px; font-size: .75rem; color: var(--muted); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 560px) {
+  .bar { gap: 8px; } select.tool { max-width: 140px; } .brand span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand"><h1>Beamter-Bot</h1><span id="tagline"></span></div>
+    <span class="pill" id="status" data-state="loading"><span class="dot"></span><span id="statusText"></span></span>
+    <select class="tool" id="docFilter" aria-label="Dokument"></select>
+    <span class="seg" role="group" aria-label="Language">
+      <button type="button" id="langDe" aria-pressed="true">DE</button>
+      <button type="button" id="langEn" aria-pressed="false">EN</button>
+    </span>
+    <button type="button" class="tool" id="newChat"></button>
+  </div>
+</header>
+
+<div class="banner" id="keyBanner" hidden>
+  <div><span id="keyMsg"></span>
+    <input type="password" id="keyInput" autocomplete="off" aria-labelledby="keyMsg">
+    <button type="button" class="tool" id="keySave"></button></div>
+</div>
+
+<main id="scroller">
+  <div id="thread" aria-live="polite"></div>
+</main>
+
+<footer>
+  <form id="form" autocomplete="off">
+    <label class="sr" for="q" id="qLabel"></label>
+    <textarea id="q" rows="1" maxlength="1000" enterkeyhint="send" disabled></textarea>
+    <button class="send" id="send" type="submit" disabled></button>
+  </form>
+  <div class="fine" id="fine"></div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const $ = (s) => document.querySelector(s);
+
+const T = {
+  de: {
+    tagline: "Fragen zu Behörden & Formularen, belegt mit Quellen",
+    loading: "Startet …", ready: (d) => `Bereit · ${d} Dokumente`, failed: "Nicht verfügbar",
+    allDocs: "Alle Dokumente", newChat: "Neuer Chat",
+    placeholder: "Frage stellen, z. B. zu Kindergeld, Wohngeld oder Anmeldung …", send: "Senden", stop: "Stopp",
+    label: "Deine Frage",
+    emptyTitle: "Was möchtest du wissen?",
+    emptyText: "Ich beantworte Fragen ausschließlich anhand offizieller Dokumente und nenne dir die Fundstelle. Steht etwas nicht darin, sage ich das.",
+    examples: ["Innerhalb welcher Frist muss ich meinen Wohnsitz anmelden?", "Wie viel Elterngeld bekomme ich mindestens?", "Do I need a blocked account as a student?", "How much is the Rundfunkbeitrag per month?"],
+    sources: "Quellen", page: "S.", section: "Abschnitt", excerpt: "Auszug",
+    how: "So wurde die Antwort gefunden", searched: "Suchanfrage", understood: "Verstanden als", score: "Beste Trefferqualität", decision: "Entscheidung",
+    rLow: "Kein passender Treffer, es wurde keine Antwort versucht", rModel: "Passagen gefunden, aber das Modell sah keine Antwort darin", rNone: "Keine Treffer", rChat: "Smalltalk, keine Suche", time: "Zeit", rewrite: "Umformulierung", llm: "Antwort", total: "Gesamt",
+    fine: "Keine Rechtsberatung. Antworten stammen nur aus den indexierten Dokumenten und können veraltet sein; verbindlich ist die zuständige Behörde.",
+    keyNeeded: "Dieser Dienst braucht einen API-Schlüssel:", keySave: "Speichern",
+    loadingWait: "Der Dienst startet noch. Bitte gleich nochmal versuchen.",
+    e401: "Ungültiger oder fehlender API-Schlüssel.", e429: (s) => `Zu viele Anfragen. Bitte in ${s} s erneut versuchen.`,
+    e503: "Das Sprachmodell oder der Dienst ist gerade nicht erreichbar. Bitte gleich nochmal versuchen.",
+    e500: "Etwas ist schiefgelaufen. Bitte nochmal versuchen.", offline: "Keine Verbindung zum Server.",
+    stopped: "Abgebrochen.",
+  },
+  en: {
+    tagline: "Questions about German authorities & forms, answered with sources",
+    loading: "Starting …", ready: (d) => `Ready · ${d} documents`, failed: "Unavailable",
+    allDocs: "All documents", newChat: "New chat",
+    placeholder: "Ask a question, e.g. about child benefit, housing benefit or registration …", send: "Send", stop: "Stop",
+    label: "Your question",
+    emptyTitle: "What would you like to know?",
+    emptyText: "I answer only from official documents and show you where I found it. If the documents don't cover something, I say so.",
+    examples: ["Innerhalb welcher Frist muss ich meinen Wohnsitz anmelden?", "Wie viel Elterngeld bekomme ich mindestens?", "Do I need a blocked account as a student?", "How much is the Rundfunkbeitrag per month?"],
+    sources: "Sources", page: "p.", section: "Section", excerpt: "Excerpt",
+    how: "How this answer was found", searched: "Search query", understood: "Understood as", score: "Best match score", decision: "Decision",
+    rLow: "No good match, no answer attempted", rModel: "Passages found, but the model saw no answer in them", rNone: "No matches", rChat: "Small talk, no search", time: "Time", rewrite: "Rewrite", llm: "Answer", total: "Total",
+    fine: "Not legal advice. Answers come only from the indexed documents and may be out of date; the responsible authority is binding.",
+    keyNeeded: "This service needs an API key:", keySave: "Save",
+    loadingWait: "The service is still starting. Please try again in a moment.",
+    e401: "Invalid or missing API key.", e429: (s) => `Too many requests. Please retry in ${s} s.`,
+    e503: "The language model or the service is unavailable right now. Please try again shortly.",
+    e500: "Something went wrong. Please try again.", offline: "Cannot reach the server.",
+    stopped: "Stopped.",
+  },
+};
+
+// Per-viewer conveniences only; the page works without storage.
+const store = {
+  get(k) { try { return sessionStorage.getItem(k) || ""; } catch { return ""; } },
+  set(k, v) { try { sessionStorage.setItem(k, v); } catch { /* storage blocked */ } },
+  getL(k) { try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+  setL(k, v) { try { localStorage.setItem(k, v); } catch { /* storage blocked */ } },
+};
+
+let lang = store.getL("bb-lang") || ((navigator.language || "de").toLowerCase().startsWith("en") ? "en" : "de");
+let apiKey = store.get("bb-key");
+let ready = false, busy = false, ctrl = null, docCount = 0;
+const history = [];
+const t = (k, ...a) => { const v = T[lang][k]; return typeof v === "function" ? v(...a) : v; };
+
+const thread = $("#thread"), scroller = $("#scroller"), q = $("#q"), sendBtn = $("#send");
+
+// ── small helpers ────────────────────────────────────────────────────────
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+const headers = () => ({ "Content-Type": "application/json", ...(apiKey ? { "X-API-Key": apiKey } : {}) });
+const toBottom = () => { scroller.scrollTop = scroller.scrollHeight; };
+
+// ── answer text -> DOM. Model output is only ever inserted as text nodes. ─
+function inline(parent, text, cites) {
+  const re = /\*\*(.+?)\*\*|\[(\d+)\]/g;
+  let last = 0, m;
+  while ((m = re.exec(text))) {
+    if (m.index > last) parent.append(text.slice(last, m.index));
+    if (m[1] !== undefined) {
+      const b = el("strong"); inline(b, m[1], cites); parent.append(b);
+    } else {
+      const n = Number(m[2]);
+      if (cites && cites.some((c) => c.n === n)) {
+        const b = el("button", "cite", String(n));
+        b.type = "button"; b.dataset.n = String(n); b.setAttribute("aria-label", `${t("sources")} ${n}`);
+        // keep a following punctuation mark on the same line as the chip
+        const after = text[re.lastIndex];
+        if (after && /[.,;:!?)]/.test(after)) {
+          const nb = el("span", "nb"); nb.append(b, "\u2060", after); parent.append(nb); re.lastIndex += 1; // \u2060 = word joiner: no line break before the mark
+        } else parent.append(b);
+      } else parent.append(m[0]);
+    }
+    last = re.lastIndex;
+  }
+  if (last < text.length) parent.append(text.slice(last));
+}
+function renderRich(box, text, cites) {
+  box.replaceChildren();
+  const blocks = text.replace(/^#{1,6}\s*(.+)$/gm, "**$1**").split(/\n{2,}/);
+  const itemRe = /^\s*([-*•]|\d+\.)\s+/;
+  for (const block of blocks) {
+    const lines = block.split("\n").filter((l) => l.trim());
+    if (!lines.length) continue;
+    if (lines.every((l) => itemRe.test(l))) {
+      const list = el(/^\s*\d+\./.test(lines[0]) ? "ol" : "ul");
+      for (const l of lines) { const li = el("li"); inline(li, l.replace(itemRe, ""), cites); list.append(li); }
+      box.append(list);
+    } else {
+      const p = el("p");
+      lines.forEach((l, i) => { if (i) p.append(el("br")); inline(p, l, cites); });
+      box.append(p);
+    }
+  }
+}
+
+// ── messages ─────────────────────────────────────────────────────────────
+function clearEmpty() { const e = $("#empty"); if (e) e.remove(); }
+function addUser(text) {
+  clearEmpty();
+  const m = el("div", "msg user"); m.append(el("div", "bubble", text)); thread.append(m); toBottom();
+}
+function addBot() {
+  clearEmpty();
+  const m = el("div", "msg bot"), bubble = el("div", "bubble cursor");
+  bubble.setAttribute("aria-busy", "true");
+  m.append(bubble); thread.append(m); toBottom();
+  return { m, bubble };
+}
+function showSources(m, bubble, cites) {
+  const wrap = el("div", "sources");
+  wrap.append(el("div", "label", t("sources")));
+  for (const c of cites) {
+    const d = el("details", "src"); d.id = `src-${m.dataset.id}-${c.n}`;
+    const s = el("summary");
+    s.append(el("span", "n", `[${c.n}]`), el("span", "file", c.source), el("span", "pg", `${t("page")} ${c.page}`));
+    const body = el("div", "body");
+    if (c.section) body.append(el("div", null, `${t("section")}: ${c.section}`));
+    body.append(el("q", null, `${c.snippet}${c.snippet.length >= 240 ? " …" : ""}`));
+    d.append(s, body); wrap.append(d);
+  }
+  m.append(wrap);
+  bubble.addEventListener("click", (ev) => {
+    const b = ev.target.closest("button.cite"); if (!b) return;
+    const d = document.getElementById(`src-${m.dataset.id}-${b.dataset.n}`); if (!d) return;
+    d.open = true; d.classList.add("flash"); d.scrollIntoView({ block: "nearest" });
+    setTimeout(() => d.classList.remove("flash"), 1400);
+  });
+}
+function showHow(m, f) {
+  const ms = f.timings_ms || {};
+  const d = el("details", "how"); d.append(el("summary", null, t("how")));
+  d.open = !f.covered && f.reason !== "chat"; // explain a refusal without being asked
+  const dl = el("dl");
+  const row = (k, v) => { dl.append(el("dt", null, k), el("dd", null, v)); };
+  if (f.interpreted_question) row(t("understood"), f.interpreted_question);
+  if (f.search_query) row(t("searched"), f.search_query);
+  if (f.top_score != null) row(t("score"), f.top_score.toFixed(2));
+  if (!f.covered) row(t("decision"), { low_score: t("rLow"), model: t("rModel"), no_hits: t("rNone"), chat: t("rChat") }[f.reason] || f.reason);
+  const fmt = (x) => (x == null ? "–" : `${Math.round(x)} ms`);
+  row(t("rewrite"), fmt(ms.rewrite_ms)); row(t("llm"), fmt(ms.llm_ms)); row(t("total"), fmt(ms.total_ms));
+  d.append(dl); m.append(d);
+}
+function fail(bot, msg) {
+  bot.bubble.className = "bubble error"; bot.bubble.removeAttribute("aria-busy");
+  bot.bubble.textContent = msg;
+}
+
+// ── server-sent events over fetch (EventSource cannot POST) ──────────────
+async function* events(res) {
+  const reader = res.body.getReader(), dec = new TextDecoder();
+  let buf = "";
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+    let i;
+    while ((i = buf.indexOf("\n\n")) >= 0) {
+      const block = buf.slice(0, i); buf = buf.slice(i + 2);
+      let name = "message"; const data = [];
+      for (const line of block.split("\n")) {
+        if (line.startsWith("event:")) name = line.slice(6).trim();
+        else if (line.startsWith("data:")) data.push(line.slice(5).replace(/^ /, ""));
+      }
+      if (data.length) yield { name, data: JSON.parse(data.join("\n")) };
+    }
+  }
+}
+
+async function httpError(res) {
+  if (res.status === 401) { showKey(); return t("e401"); }
+  if (res.status === 429) return t("e429", res.headers.get("Retry-After") || "10");
+  if (res.status === 503) return ready ? t("e503") : t("loadingWait");
+  return t("e500");
+}
+
+// ── asking ───────────────────────────────────────────────────────────────
+let counter = 0;
+async function ask(question) {
+  question = question.trim();
+  if (!question || busy || !ready) return;
+  setBusy(true);
+  addUser(question);
+  const bot = addBot(); bot.m.dataset.id = String(++counter);
+  const body = { question, history: history.slice(-6) };
+  const src = $("#docFilter").value; if (src) body.source = src;
+  ctrl = new AbortController();
+  let text = "";
+  try {
+    const res = await fetch("/ask/stream", { method: "POST", headers: headers(), body: JSON.stringify(body), signal: ctrl.signal });
+    if (!res.ok) { fail(bot, await httpError(res)); return; }
+    for await (const ev of events(res)) {
+      if (ev.name === "delta") {
+        text += ev.data.text; bot.bubble.textContent = text; toBottom();
+      } else if (ev.name === "final") {
+        const f = ev.data;
+        bot.bubble.classList.remove("cursor"); bot.bubble.removeAttribute("aria-busy");
+        renderRich(bot.bubble, f.answer, f.citations);
+        if (!f.covered && f.reason !== "chat") bot.bubble.classList.add("refused");
+        if (f.citations.length) showSources(bot.m, bot.bubble, f.citations);
+        showHow(bot.m, f);
+        history.push({ role: "user", content: question.slice(0, 1000) }, { role: "assistant", content: f.answer.slice(0, 2000) });
+        toBottom();
+      } else if (ev.name === "error") {
+        fail(bot, ev.data.detail && /unavailable/i.test(ev.data.detail) ? t("e503") : t("e500"));
+      }
+    }
+    bot.bubble.classList.remove("cursor");
+  } catch (err) {
+    if (err.name === "AbortError") { bot.bubble.classList.remove("cursor"); bot.bubble.removeAttribute("aria-busy"); if (!text) bot.bubble.textContent = t("stopped"); }
+    else fail(bot, t("offline"));
+  } finally {
+    setBusy(false); ctrl = null; q.focus();
+  }
+}
+
+function setBusy(on) {
+  busy = on;
+  sendBtn.textContent = on ? t("stop") : t("send");
+  sendBtn.classList.toggle("stop", on);
+  sendBtn.disabled = !ready;
+  q.disabled = !ready || on;
+}
+
+// ── status, sources, language ────────────────────────────────────────────
+function setStatus(state, docs) {
+  const p = $("#status"); p.dataset.state = state;
+  $("#statusText").textContent = state === "ready" ? t("ready", docs) : state === "failed" ? t("failed") : t("loading");
+}
+async function pollReady() {
+  try {
+    const r = await fetch("/readyz");
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) {
+      ready = true; docCount = j.documents || 0; setStatus("ready", docCount); setBusy(false);
+      loadSources(); return;
+    }
+    setStatus(j.status === "failed" ? "failed" : "loading");
+  } catch { setStatus("loading"); }
+  setTimeout(pollReady, 3000);
+}
+async function loadSources() {
+  const sel = $("#docFilter"), keep = sel.value;
+  sel.replaceChildren(new Option(t("allDocs"), ""));
+  try {
+    const r = await fetch("/sources", { headers: headers() });
+    if (r.status === 401) { showKey(); return; }
+    if (!r.ok) return;
+    const j = await r.json();
+    for (const name of Object.keys(j.documents || {}).sort()) sel.append(new Option(name, name));
+    sel.value = [...sel.options].some((o) => o.value === keep) ? keep : "";
+  } catch { /* the filter stays on "all documents" */ }
+}
+function showKey() {
+  $("#keyBanner").hidden = false;
+}
+
+function renderEmpty() {
+  const e = el("div", "empty"); e.id = "empty";
+  e.append(el("h2", null, t("emptyTitle")), el("p", null, t("emptyText")));
+  const chips = el("div", "chips");
+  for (const ex of t("examples")) {
+    const c = el("button", "chip", ex); c.type = "button";
+    c.addEventListener("click", () => ask(ex)); chips.append(c);
+  }
+  e.append(chips); thread.prepend(e);
+}
+function applyLang() {
+  document.documentElement.lang = lang;
+  $("#tagline").textContent = t("tagline");
+  $("#newChat").textContent = t("newChat");
+  q.placeholder = t("placeholder"); $("#qLabel").textContent = t("label");
+  $("#fine").textContent = t("fine");
+  $("#keyMsg").textContent = t("keyNeeded"); $("#keySave").textContent = t("keySave");
+  $("#langDe").setAttribute("aria-pressed", String(lang === "de"));
+  $("#langEn").setAttribute("aria-pressed", String(lang === "en"));
+  const first = $("#docFilter").options[0]; if (first) first.textContent = t("allDocs");
+  setStatus($("#status").dataset.state, docCount);
+  sendBtn.textContent = busy ? t("stop") : t("send");
+  const e = $("#empty"); if (e) { e.remove(); renderEmpty(); }
+}
+
+// ── wiring ───────────────────────────────────────────────────────────────
+$("#form").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  if (busy) { ctrl && ctrl.abort(); return; }
+  const text = q.value; q.value = ""; grow(); ask(text);
+});
+q.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); $("#form").requestSubmit(); }
+});
+function grow() { q.style.height = "auto"; q.style.height = Math.min(q.scrollHeight, 160) + "px"; }
+q.addEventListener("input", grow);
+$("#langDe").addEventListener("click", () => { lang = "de"; store.setL("bb-lang", lang); applyLang(); });
+$("#langEn").addEventListener("click", () => { lang = "en"; store.setL("bb-lang", lang); applyLang(); });
+$("#newChat").addEventListener("click", () => {
+  if (ctrl) ctrl.abort();
+  history.length = 0; thread.replaceChildren(); renderEmpty(); q.focus();
+});
+$("#keySave").addEventListener("click", () => {
+  apiKey = $("#keyInput").value.trim(); store.set("bb-key", apiKey); $("#keyInput").value = "";
+  $("#keyBanner").hidden = true; loadSources();
+});
+
+applyLang(); renderEmpty(); setBusy(false); pollReady();
+})();
+</script>
+</body>
+</html>

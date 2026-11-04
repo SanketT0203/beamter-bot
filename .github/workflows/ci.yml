@@ -1,0 +1,22 @@
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install dependencies from uv.lock (without PyTorch)
+        run: |
+          uv venv --python 3.12
+          uv export --frozen --extra dev --no-emit-project --no-hashes --no-annotate -o all.txt
+          grep -v -i -E '^(torch|triton|nvidia-|cuda-|sentence-transformers)' all.txt > light.txt
+          uv pip install --no-deps -r light.txt
+      - name: Run the tests
+        run: uv run --no-sync pytest -q
