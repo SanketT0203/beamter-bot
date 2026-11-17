@@ -46,9 +46,11 @@ the user asks for another language ("tell it in German", "auf Englisch bitte") u
 Resolve follow-ups and pronouns from the conversation (a request like "tell it in German" or "shorter" \
 means: the previous question again), fix typos, and turn bare keywords into a question \
 ("blocked account" -> "What do the documents say about a blocked account for students?").
-- search_query: the same question as a complete German sentence, not a keyword list. Use the official terms \
-the documents use ("Sperrkonto", "Mietsicherheit" for Kaution, "Kündigungsschutz", "Arbeitsuchendmeldung", \
-"Wohngeld" for housing benefit) and keep numbers, names and years."""
+- search_query: the same question as a complete German sentence, not a keyword list. Write it in the formal \
+administrative German the documents use, not everyday words: "Studierende" (never "Student" or "Studenten"), \
+"Sperrkonto", "Mietsicherheit" for Kaution, "Kündigungsschutz", "Arbeitsuchendmeldung", "Wohngeld" for \
+housing benefit, "Aufenthaltserlaubnis" for residence permit, "Meldebehörde" for registration office. \
+Keep numbers, names and years."""
 
 ANSWER_SYSTEM = """You answer questions about German bureaucracy using ONLY the numbered sources \
 inside <sources> tags.
@@ -156,6 +158,7 @@ class Answer:
     interpreted: str = ""  # the question as the bot understood it (follow-ups resolved, typos fixed)
     top_score: float | None = None  # rerank score of the best passage: how confident the retrieval was
     timings: dict = field(default_factory=dict)  # milliseconds per stage, filled by the pipeline
+    cached: bool = False  # True when this answer was served from the cache
 
 
 @dataclass

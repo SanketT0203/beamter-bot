@@ -196,7 +196,7 @@ const T = {
     examples: ["Innerhalb welcher Frist muss ich meinen Wohnsitz anmelden?", "Wie viel Elterngeld bekomme ich mindestens?", "Do I need a blocked account as a student?", "How much is the Rundfunkbeitrag per month?"],
     sources: "Quellen", page: "S.", section: "Abschnitt", excerpt: "Auszug",
     how: "So wurde die Antwort gefunden", searched: "Suchanfrage", understood: "Verstanden als", score: "Beste Trefferqualität", decision: "Entscheidung",
-    rLow: "Kein passender Treffer, es wurde keine Antwort versucht", rModel: "Passagen gefunden, aber das Modell sah keine Antwort darin", rNone: "Keine Treffer", rChat: "Smalltalk, keine Suche", time: "Zeit", rewrite: "Umformulierung", llm: "Antwort", total: "Gesamt",
+    rLow: "Kein passender Treffer, es wurde keine Antwort versucht", rModel: "Passagen gefunden, aber das Modell sah keine Antwort darin", rNone: "Keine Treffer", rChat: "Smalltalk, keine Suche", time: "Zeit", cacheHit: "Aus dem Zwischenspeicher", rewrite: "Umformulierung", llm: "Antwort", total: "Gesamt",
     fine: "Keine Rechtsberatung. Antworten stammen nur aus den indexierten Dokumenten und können veraltet sein; verbindlich ist die zuständige Behörde.",
     keyNeeded: "Dieser Dienst braucht einen API-Schlüssel:", keySave: "Speichern",
     loadingWait: "Der Dienst startet noch. Bitte gleich nochmal versuchen.",
@@ -216,7 +216,7 @@ const T = {
     examples: ["Innerhalb welcher Frist muss ich meinen Wohnsitz anmelden?", "Wie viel Elterngeld bekomme ich mindestens?", "Do I need a blocked account as a student?", "How much is the Rundfunkbeitrag per month?"],
     sources: "Sources", page: "p.", section: "Section", excerpt: "Excerpt",
     how: "How this answer was found", searched: "Search query", understood: "Understood as", score: "Best match score", decision: "Decision",
-    rLow: "No good match, no answer attempted", rModel: "Passages found, but the model saw no answer in them", rNone: "No matches", rChat: "Small talk, no search", time: "Time", rewrite: "Rewrite", llm: "Answer", total: "Total",
+    rLow: "No good match, no answer attempted", rModel: "Passages found, but the model saw no answer in them", rNone: "No matches", rChat: "Small talk, no search", time: "Time", cacheHit: "Served from cache", rewrite: "Rewrite", llm: "Answer", total: "Total",
     fine: "Not legal advice. Answers come only from the indexed documents and may be out of date; the responsible authority is binding.",
     keyNeeded: "This service needs an API key:", keySave: "Save",
     loadingWait: "The service is still starting. Please try again in a moment.",
@@ -340,7 +340,9 @@ function showHow(m, f) {
   if (f.top_score != null) row(t("score"), f.top_score.toFixed(2));
   if (!f.covered) row(t("decision"), { low_score: t("rLow"), model: t("rModel"), no_hits: t("rNone"), chat: t("rChat") }[f.reason] || f.reason);
   const fmt = (x) => (x == null ? "–" : `${Math.round(x)} ms`);
-  row(t("rewrite"), fmt(ms.rewrite_ms)); row(t("llm"), fmt(ms.llm_ms)); row(t("total"), fmt(ms.total_ms));
+  if (f.cached) row(t("cacheHit"), fmt(ms.cache_ms));
+  else { row(t("rewrite"), fmt(ms.rewrite_ms)); row(t("llm"), fmt(ms.llm_ms)); }
+  row(t("total"), fmt(ms.total_ms));
   d.append(dl); m.append(d);
 }
 function fail(bot, msg) {

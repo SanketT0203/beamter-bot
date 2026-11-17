@@ -73,6 +73,7 @@ class AskResponse(BaseModel):
     interpreted_question: str = Field(default="", description="The question as the bot understood it")
     top_score: float | None = Field(default=None, description="Rerank score of the best passage")
     timings_ms: dict[str, float]
+    cached: bool = Field(default=False, description="True when the answer came from the in-memory cache")
 
 
 def to_response(a: Answer) -> AskResponse:
@@ -86,6 +87,7 @@ def to_response(a: Answer) -> AskResponse:
         interpreted_question=a.interpreted,
         top_score=a.top_score,
         timings_ms=a.timings,
+        cached=a.cached,
     )
 
 

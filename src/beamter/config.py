@@ -103,6 +103,8 @@ class Settings:
     rate_limit_per_min: int  # per client and instance; 0 = unlimited
     reload_check_s: int  # how often to look for a new index version; 0 = never
     cors_origins: str  # comma-separated browser origins allowed to call the API; empty = none
+    cache_max_entries: int  # answers kept in memory per instance; 0 = no cache
+    cache_ttl_s: int  # how long a cached answer stays valid
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -135,6 +137,8 @@ class Settings:
             rate_limit_per_min=_int("BEAMTER_RATE_LIMIT_PER_MIN", 30),
             reload_check_s=_int("BEAMTER_RELOAD_CHECK_S", 60),
             cors_origins=_str("BEAMTER_CORS_ORIGINS"),
+            cache_max_entries=_int("BEAMTER_CACHE_MAX_ENTRIES", 256),
+            cache_ttl_s=_int("BEAMTER_CACHE_TTL_S", 6 * 3600),
         )
 
     def validate(self, require_llm: bool = True) -> None:
@@ -161,6 +165,8 @@ class Settings:
             problems.append("pool sizes, TOP_K and HISTORY_TURNS must each be at least 1")
         if self.max_concurrent_requests < 1 or self.rate_limit_per_min < 0 or self.reload_check_s < 0:
             problems.append("MAX_CONCURRENCY must be >= 1; RATE_LIMIT_PER_MIN and RELOAD_CHECK_S must be >= 0")
+        if self.cache_max_entries < 0 or self.cache_ttl_s < 0:
+            problems.append("CACHE_MAX_ENTRIES and CACHE_TTL_S must be >= 0 (0 switches the cache off)")
         if self.llm_timeout_s < 1 or self.llm_max_retries < 0:
             problems.append("LLM timeout must be >= 1 second and retries >= 0")
         if problems:
